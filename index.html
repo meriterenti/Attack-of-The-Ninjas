@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<title>Attack of The Ninjas</title>
+	</head>
+
+	<body>
+		<div id="heading">
+			<h2>ATTAK OF THE NINJAS</h2>
+			<div id="props">
+				<div>Score: <span id="score">0</span></div>
+				<div>Level: <span id="level">0</span></div>
+				<audio id="myAudio">
+				  <source src="audio/game-sound.ogg" type="audio/ogg">
+				  <source src="audio/game-sound.mp3" type="audio/mpeg">
+				  Your browser does not support the audio element.
+				</audio>
+				<img class="paused" id="pauseAudio" onclick="playorPauseAudio()" src="images/buttons/pause.png" />
+			</div>
+		</div>
+		<div id="gamePlay">
+			<h1>ATTAK OF THE NINJAS</h1>
+			<p>Press &nbsp; <span id="arrows">&larr; &uarr; &rarr; &darr; </span> &nbsp; to run away from angry Ninjas</p>
+			<button class="startGame" onclick="playorPauseAudio(); startGame();"> Play </button>
+		</div>
+		<div id="gameOver">
+			<h2>GAME OVER</h2>
+			<button class="startGame" onclick="playorPauseAudio(); startGame('restart');"> Play Again </button>
+		</div>
+		<div id="canvasContainer">
+			<canvas id='canvas' > </canvas>
+		</div>	
+	<script src="main.js"></script>
+	</body>
+</html>
