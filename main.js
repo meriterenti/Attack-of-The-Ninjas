@@ -180,7 +180,7 @@ const startGame = function(action = 'start'){
 		levelDefault += 1
 		level.innerHTML = levelDefault;
 		moveEnemies(true);
-	},10000)
+	},20000)
 	
 	hero.x = canvas.width/2 - 35;
 	hero.y = canvas.height - 70;
