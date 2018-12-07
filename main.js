@@ -1,9 +1,51 @@
 let speedIncrease = 0;
-let levelInterval;
-let scoreInterval;
+let levelInterval, scoreInterval;
 let play = true;
 let gameBegin = false;
 let restart = false;
+
+const canvas = document.getElementById('canvas');
+const context = canvas.getContext('2d');
+
+canvas.width = 1366;
+canvas.height = 569;
+
+const gameOverSound = new Audio('audio/gameover.mp3');
+const bgSound = new Audio('audio/game-sound.mp3');
+
+const goodGuyImg = new Image();
+goodGuyImg.src = 'images/hero_ninja.png';
+
+const badGuysImagesPath = 'images/enemies/';
+const badGuyImages = [];
+for(let i = 1; i < 12; i++){
+	badGuyImages.push(badGuysImagesPath+'enemy'+i+'.png');
+}
+
+/** Keypress functionality **/
+
+const leftKey = 37;
+const upKey = 38;
+const rightKey = 39;
+const downKey = 40;
+
+document.addEventListener('keydown', function(event) {
+	hero.update(event.keyCode);
+}, false);
+
+/** Helper Functions **/
+
+const rand = function(num) {
+	return Math.floor(Math.random() * num) + 1;
+};
+const plusOrMinus = function() {
+	return Math.random() < 0.5 ? -1 : 1;
+}
+const draw = function() {
+	context.drawImage(this.image, this.x, this.y, this.width, this.height);
+};
+
+/** Game sound and mute/play icons functionality **/
 
 const playorPauseAudio = function(sound = 'on') { 
 	button = document.getElementById("pauseAudio");
@@ -20,43 +62,7 @@ const playorPauseAudio = function(sound = 'on') {
 	}
 }; 
 
-const canvas = document.getElementById('canvas');
-const context = canvas.getContext('2d');
-
-canvas.width = 1366;
-canvas.height = 569;
-
-const gameOverSound = new Audio('audio/gameover.mp3');
-const bgSound = new Audio('audio/game-sound.mp3');
-
-const goodGuyImg = new Image();
-goodGuyImg.src = 'images/hero_ninja.png';
-
-const badGuysImagesPath = 'images/enemies/';
-const badGuyImages = [];
-
-for(let i = 1; i < 12; i++){
-	badGuyImages.push(badGuysImagesPath+'enemy'+i+'.png');
-}
-
-const leftKey = 37;
-const upKey = 38;
-const rightKey = 39;
-const downKey = 40;
-
-document.addEventListener('keydown', function(event) {
-	hero.update(event.keyCode);
-}, false);
-
-const rand = function(num) {
-	return Math.floor(Math.random() * num) + 1;
-};
-const plusOrMinus = function() {
-	return Math.random() < 0.5 ? -1 : 1;
-}
-const draw = function() {
-	context.drawImage(this.image, this.x, this.y, this.width, this.height);
-};
+/** Create and move the Hero **/
 
 const hero = {
 	x: canvas.width/2 - 35,
@@ -92,6 +98,8 @@ const hero = {
 	}
 };
 
+/** Create and move enemies **/
+
 const createEnemies = function(count, canvasWidth, canvasHeight, action = 'start') {
 	const enemies = [];
 	for(let i=0;i<count;++i){
@@ -122,7 +130,9 @@ const createEnemies = function(count, canvasWidth, canvasHeight, action = 'start
 	return enemies;
 }
 
-const moveEnemies = function(onGame = false){
+/** Add more enemies on level update and rerender them on game restart **/
+
+const renderEnemies = function(onGame = false){
 	if(onGame){
 		enemies = enemies.concat(createEnemies(3, canvas.width, canvas.height))
 	}
@@ -146,6 +156,8 @@ const moveEnemies = function(onGame = false){
 
 let enemies = createEnemies(5, canvas.width, canvas.height)
 
+/** Create the main loop function **/
+
 const loop = function() {
 	if(!play){
 		return false;
@@ -156,10 +168,12 @@ const loop = function() {
 		background.src = 'images/bg_main.png';
 		context.drawImage(background, 0, 0, canvas.width, canvas.height);
 		hero.draw()
-		moveEnemies();
+		renderEnemies();
 	}
 	requestAnimationFrame(loop);
 };
+
+/** Create levelUp interval and call loop function to start/restart the game **/
 
 const startGame = function(action = 'start'){
 	speedIncrease = 0;
@@ -179,8 +193,8 @@ const startGame = function(action = 'start'){
 		speedIncrease += 0.1;
 		levelDefault += 1
 		level.innerHTML = levelDefault;
-		moveEnemies(true);
-	},20000)
+		renderEnemies(true);
+	},15000)
 	
 	hero.x = canvas.width/2 - 35;
 	hero.y = canvas.height - 70;
