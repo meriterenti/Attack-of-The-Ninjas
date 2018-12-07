@@ -5,14 +5,14 @@ let play = true;
 let gameBegin = false;
 let restart = false;
 
-//const bgAudio = document.getElementById("myAudio"); 
-
-const playorPauseAudio = function() { 
+const playorPauseAudio = function(sound = 'on') { 
 	button = document.getElementById("pauseAudio");
 	if(button.classList.contains("paused") === true){
-		bgSound.play(); 
+		if(sound === 'on'){
+			bgSound.play(); 
+			button.src = "images/buttons/pause.png";
+		}
 		button.classList.remove("paused");
-		button.src = "images/buttons/pause.png";
 	}else{
 		bgSound.pause(); 
 		button.classList.add("paused");
@@ -34,6 +34,7 @@ goodGuyImg.src = 'images/hero_ninja.png';
 
 const badGuysImagesPath = 'images/enemies/';
 const badGuyImages = [];
+
 for(let i = 1; i < 12; i++){
 	badGuyImages.push(badGuysImagesPath+'enemy'+i+'.png');
 }
@@ -42,6 +43,7 @@ const leftKey = 37;
 const upKey = 38;
 const rightKey = 39;
 const downKey = 40;
+
 document.addEventListener('keydown', function(event) {
 	hero.update(event.keyCode);
 }, false);
@@ -110,7 +112,7 @@ const createEnemies = function(count, canvasWidth, canvasHeight, action = 'start
 				play = false;
 				clearInterval(levelInterval);
 				clearInterval(scoreInterval);
-				playorPauseAudio();
+				playorPauseAudio('off');
 				gameOverSound.play();
 				document.getElementById("gameOver").style.display = 'flex';
 			}
@@ -143,6 +145,7 @@ const moveEnemies = function(onGame = false){
 }
 
 let enemies = createEnemies(5, canvas.width, canvas.height)
+
 const loop = function() {
 	if(!play){
 		return false;
@@ -178,6 +181,7 @@ const startGame = function(action = 'start'){
 		level.innerHTML = levelDefault;
 		moveEnemies(true);
 	},5000)
+	
 	hero.x = canvas.width/2 - 35;
 	hero.y = canvas.height - 70;
 	gameBegin = true;
