@@ -2,6 +2,8 @@ body{
 	font-family: sans-serif;
 	padding: 0;
 	margin: 0;
+	background: #07040d;
+	background-image: radial-gradient(#0b141f, #0e2430, #186570);
 }
 
 h1, h2{
